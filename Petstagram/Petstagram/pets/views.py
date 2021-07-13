@@ -26,7 +26,7 @@ def pet_details(req, pk):
 
 def comment_pet(request, pk):
     pet = Pet.objects.get(pk=pk)
-    form = CommentForm(request.POST)
+    form = CommentForm(request.POST, request.FILES)
     if form.is_valid():
         comment = Comment(
             comment=form.cleaned_data['comment'],
@@ -44,7 +44,7 @@ def like_pet(req, pk):
 
 def create_pet(request):
     if request.method == 'POST':
-        pet = CreatePetForm(request.POST)
+        pet = CreatePetForm(request.POST, request.FILES)
         if pet.is_valid():
             pet.save()
             return redirect('list pets')
@@ -62,7 +62,7 @@ def create_pet(request):
 def edit_pet(request, pk):
     selected_pet = Pet.objects.get(pk=pk)
     if request.method == 'POST':
-        pet = CreatePetForm(request.POST, instance=selected_pet)
+        pet = CreatePetForm(request.POST, request.FILES, instance=selected_pet)
         if pet.is_valid():
             pet.save()
             return redirect('list pets')

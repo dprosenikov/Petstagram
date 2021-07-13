@@ -1,4 +1,8 @@
+import os
+from os.path import join
+
 from django import forms
+from django.conf import settings
 
 from Petstagram.pets.models import Pet
 
@@ -33,13 +37,13 @@ class CreatePetForm(forms.ModelForm):
         )
     )
 
-    image_url = forms.URLField(
+    image = forms.ImageField(
         required=True,
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control'
-            }
-        )
+        # widget=forms.FileField(
+        #     attrs={
+        #         'class': 'form-control'
+        #     }
+        # )
     )
 
     description = forms.CharField(
@@ -51,6 +55,14 @@ class CreatePetForm(forms.ModelForm):
         )
     )
 
+    #delete the image that is edited/replaced
+    def save(self, commit=True):
+        db_pet = Pet.objects.get(pk=self.instance.id)
+        if commit:
+            image_path = join(settings.MEDIA_ROOT, str(db_pet.image))
+            os.remove(image_path)
+        return super().save(commit)
+
     class Meta:
         model = Pet
-        fields = ('type', 'name', 'age', 'description', 'image_url')
+        fields = ('type', 'name', 'age', 'description', 'image')
