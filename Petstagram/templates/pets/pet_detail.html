@@ -11,12 +11,22 @@
                 <h5><u>Type:</u> {{ pet.type }}</h5>
                 <h5><u>Name:</u> {{ pet.name }}</h5>
                 <h5><u>Age:</u> {{ pet.age }}</h5>
+                <h5><u>Owner:</u> {{ pet.user.email }}</h5>
             </div>
             <p class="mt-2">Description: {{ pet.description }}</p>
-            <a href="{% url 'edit pet' pet.id %}" class="btn btn-success">Edit</a>
-            <a href="{% url 'delete pet' pet.id %}" class="btn btn-danger">Delete</a>
-            <a href="{% url 'like pet' pet.id %}"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
-            <p class="mt-2">Likes: {{ pet.likes_count }}</p>
+            {% if is_owner %}
+                <a href="{% url 'edit pet' pet.id %}" class="btn btn-success">Edit</a>
+                <a href="{% url 'delete pet' pet.id %}" class="btn btn-danger">Delete</a>
+            {% else %}
+                <a href="{% url 'like pet' pet.id %}">
+                    {% if is_liked %}
+                        <i class="fa fa-heart" aria-hidden="true"></i>
+                    {% else %}
+                        <i class="fa fa-heart-o" aria-hidden="true"></i>
+                    {% endif %}
+                </a>
+                <p class="mt-2">Likes: {{ pet.likes_count }}</p>
+            {% endif %}
         </div>
     </div>
 
@@ -24,7 +34,7 @@
         {% if comments %}
             {% for com in comments %}
                 <div class="box">
-                    <h5><em>{{ com.comment }}</em></h5>
+                    <h5><u>{{ com.user }}</u>: <em>{{ com.comment }}</em></h5>
                     <hr>
                 </div>
             {% endfor %}
@@ -33,13 +43,15 @@
                 <h3>There are no comments for this pet. </h3>
             </div>
         {% endif %}
-        <div class="box">
-            <form method="post" action="{% url 'comment pet' pet.id %}">
-                {% csrf_token %}
-                {{ comment }}
-                <button class="btn btn-primary mt-2" type="submit">Add comment</button>
-            </form>
-        </div>
+        {% if not is_owner %}
+            <div class="box">
+                <form method="post" action="{% url 'comment pet' pet.id %}">
+                    {% csrf_token %}
+                    {{ comment }}
+                    <button class="btn btn-primary mt-2" type="submit">Add comment</button>
+                </form>
+            </div>
+        {% endif %}
     </div>
 
 {% endblock %}

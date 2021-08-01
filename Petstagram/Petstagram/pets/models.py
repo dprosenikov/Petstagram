@@ -2,7 +2,10 @@ import os
 from os.path import join
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.db import models
+
+UserModel = get_user_model()
 
 
 class Pet(models.Model):
@@ -25,6 +28,8 @@ class Pet(models.Model):
         upload_to='images/pets'
     )
 
+    user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
+
     # # delete the image that is edited/replaced
     # def save(self, force_insert=False, force_update=False, using=None,
     #          update_fields=None):
@@ -36,3 +41,4 @@ class Pet(models.Model):
 
 class Like(models.Model):
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserModel, on_delete=models.CASCADE)

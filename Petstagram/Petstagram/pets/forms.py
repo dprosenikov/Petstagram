@@ -55,10 +55,10 @@ class CreatePetForm(forms.ModelForm):
         )
     )
 
-    #delete the image that is edited/replaced
+    # delete the image that is edited/replaced
     def save(self, commit=True):
-        db_pet = Pet.objects.get(pk=self.instance.id)
         if commit:
+            db_pet = Pet.objects.get(pk=self.instance.id)
             image_path = join(settings.MEDIA_ROOT, str(db_pet.image))
             os.remove(image_path)
         return super().save(commit)

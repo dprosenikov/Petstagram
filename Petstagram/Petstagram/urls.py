@@ -6,5 +6,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('Petstagram.common.urls')),
-    path('pets/', include('Petstagram.pets.urls'))
+    path('pets/', include('Petstagram.pets.urls')),
+    path('accounts/', include('Petstagram.accounts.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
