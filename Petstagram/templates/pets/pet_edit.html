@@ -9,7 +9,7 @@
             <form method="post" class="furniture-form" enctype="multipart/form-data">
                 {{ pet.errors }}
                 {% csrf_token %}
-                {{ pet }}
+                {{ form }}
                 <button class="btn btn-primary mt-2" type="submit">Edit</button>
             </form>
         </div>

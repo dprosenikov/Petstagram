@@ -1,10 +1,11 @@
 from django.urls import path
 
-from Petstagram.accounts.views import login_user, register_user, logout_user, profile_details
+from Petstagram.accounts.views import login_user, logout_user, RegisterView, ProfileDetailsView, LoginView, \
+    LoginUserView
 
 urlpatterns = [
-    path('login/', login_user, name='login user'),
-    path('register/', register_user, name='register user'),
+    path('login/', LoginUserView.as_view(), name='login user'),
+    path('register/', RegisterView.as_view(), name='register user'),
     path('logout/', logout_user, name='logout user'),
-    path('profile/', profile_details, name='profile')
+    path('profile/', ProfileDetailsView.as_view(), name='profile')
 ]
